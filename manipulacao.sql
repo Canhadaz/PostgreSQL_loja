@@ -7,8 +7,8 @@ values
 	('Bruno', 'bruno@gmail.com')
 on conflict (email) do nothing;
 
-alter table produtos
-	add constraint unique_nome unique (nome);
+--alter table produtos
+--	add constraint unique_nome unique (nome);
 
 insert into produtos (nome, preco, estoque)
 values
@@ -24,21 +24,28 @@ values
 	('requeijão', 13.00,10)
 on conflict (nome) do nothing;
 
-insert into pedidos (cliente_id, status) values
-    ((select id from clientes where email = 'murilo@gmail.com'),   'pago'),
-    ((select id from clientes where email = 'murilo@gmail.com'),   'enviado'),
-    ((select id from clientes where email = 'bruno@gmail.com'), 'pago'),
-    ((select id from clientes where email = 'bruno@gmail.com'), 'cancelado'),
-    ((select id from clientes where email = 'gabriel@gmail.com'), 'pendente'),
-    ((select id from clientes where email = 'gabriel@gmail.com'), 'pago'),
-    ((select id from clientes where email = 'matheus@gmail.com'), 'enviado'),
-    ((select id from clientes where email = 'matheus@gmail.com'), 'pendente')
-on conflict (id) do nothing;
+--insert into pedidos (cliente_id, status) values
+--    ((select id from clientes where email = 'murilo@gmail.com'),   'pago'),
+--    ((select id from clientes where email = 'murilo@gmail.com'),   'enviado'),
+--    ((select id from clientes where email = 'bruno@gmail.com'), 'pago'),
+--    ((select id from clientes where email = 'bruno@gmail.com'), 'cancelado'),
+--    ((select id from clientes where email = 'gabriel@gmail.com'), 'pendente'),
+--    ((select id from clientes where email = 'gabriel@gmail.com'), 'pago'),
+--    ((select id from clientes where email = 'matheus@gmail.com'), 'enviado'),
+--    ((select id from clientes where email = 'matheus@gmail.com'), 'pendente')
+--on conflict (id) do nothing;
 
-update produtos
-set preco = preco * 1.1;
+--update produtos
+--set preco = preco * 1.1;
 
 select * from clientes;
 select * from produtos;
+
+--select * from produtos order by preco limit 3; 
+--select nome from clientes where nome like 'B%';
+--select nome, preco from produtos where (preco > 15 and preco < 30 and estoque > 0);
+--select count(*) from clientes;
+--select avg(preco) from produtos;
+
 select * from pedidos;
 
