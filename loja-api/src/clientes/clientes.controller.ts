@@ -1,5 +1,6 @@
-import { Controller, Get, NotFoundException, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ClientesService } from './clientes.service';
+import { CriarClienteDto } from './dto/criar-cliente.dto';
 
 @Controller('clientes')
 export class ClientesController {
@@ -26,5 +27,10 @@ export class ClientesController {
             throw new NotFoundException(`Cliente com email ${email} não encontrado.`);
         }
         return cliente;
+    }
+
+    @Post()
+    criar (@Body() dados: CriarClienteDto) {
+        return this.clientesService.criar(dados);
     }
 }
