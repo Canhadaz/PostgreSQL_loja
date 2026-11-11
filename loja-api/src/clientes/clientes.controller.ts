@@ -1,6 +1,7 @@
-import { Body, Controller, Get, NotFoundException, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { ClientesService } from './clientes.service';
 import { CriarClienteDto } from './dto/criar-cliente.dto';
+import { AtualizarClienteDto } from './dto/atualizar-cliente.dto';
 
 @Controller('clientes')
 export class ClientesController {
@@ -32,5 +33,14 @@ export class ClientesController {
     @Post()
     criar (@Body() dados: CriarClienteDto) {
         return this.clientesService.criar(dados);
+    }
+
+    @Put(':id')
+    async atualizar(@Param('id', ParseUUIDPipe) id: string, @Body() dados: AtualizarClienteDto) {
+        const cliente = await this.clientesService.buscarClientePorId(id);
+        if (!cliente) {
+            throw new NotFoundException(`Cliente com ID ${id} não encontrado.`);
+        }
+        return this.clientesService.atualizar(id, dados);
     }
 }

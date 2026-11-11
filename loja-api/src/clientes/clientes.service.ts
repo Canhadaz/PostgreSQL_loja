@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CriarClienteDto } from './dto/criar-cliente.dto';
+import { AtualizarClienteDto } from './dto/atualizar-cliente.dto';
 
 @Injectable()
 export class ClientesService {
@@ -27,6 +28,18 @@ export class ClientesService {
       return result.rows[0];
     } catch (error) {
       if ((error as { code: string }).code === '23505') {
+        throw new ConflictException(`Já existe um cliente com o email ${dados.email}`);
+      }
+      throw error;
+    }
+  }
+
+  async atualizar(id: string, dados: AtualizarClienteDto) {
+    try {
+      const result = await this.db.query('UPDATE clientes SET nome = $1, email = $2 WHERE id = $3 RETURNING *', [dados.nome, dados.email, id]);
+      return result.rows[0];
+    } catch (error) {
+      if ((error as { code?: string }).code === '23505') {
         throw new ConflictException(`Já existe um cliente com o email ${dados.email}`);
       }
       throw error;
