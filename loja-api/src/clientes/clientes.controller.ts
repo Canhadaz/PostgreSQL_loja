@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, ParseUUIDPipe, Post, Put } from '@nestjs/common';
 import { ClientesService } from './clientes.service';
 import { CriarClienteDto } from './dto/criar-cliente.dto';
 import { AtualizarClienteDto } from './dto/atualizar-cliente.dto';
@@ -42,5 +42,14 @@ export class ClientesController {
             throw new NotFoundException(`Cliente com ID ${id} não encontrado.`);
         }
         return this.clientesService.atualizar(id, dados);
+    }
+
+    @Delete(':id')
+    @HttpCode(204)
+    async deletar(@Param('id', ParseUUIDPipe) id: string) {
+        const cliente = await this.clientesService.deletar(id);
+        if (!cliente) {
+            throw new NotFoundException(`Cliente com ID ${id} não encontrado.`);
+        }
     }
 }

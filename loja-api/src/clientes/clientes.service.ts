@@ -45,4 +45,16 @@ export class ClientesService {
       throw error;
     }
   }
+
+  async deletar(id: string) {
+    try {
+      const result = await this.db.query('DELETE FROM clientes WHERE id = $1 RETURNING *', [id]);
+      return result.rows[0];
+    } catch (error) {
+      if ((error as {code?: string }).code === '23503') {
+        throw new ConflictException(`O cliente selecionado possui pedidos, e portanto não pode ser deletado!`);
+      }
+      throw error;
+    }
+  }
 }
